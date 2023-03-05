@@ -1,4 +1,4 @@
-﻿namespace hdungx99.Core.Auth.AuthClient
+﻿namespace hdungx99.Core.Auth.AuthClientDI
 {
     public interface IAuthClient
     {

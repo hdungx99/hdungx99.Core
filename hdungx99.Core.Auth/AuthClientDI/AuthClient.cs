@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Net.Http.Headers;
 
-namespace hdungx99.Core.Auth.AuthClient
+namespace hdungx99.Core.Auth.AuthClientDI
 {
     public class AuthClient : IAuthClient
     {
