@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace hdungx99.Core.EF.Entity
 {
-    public class EntityBase
+    public abstract class BaseEntity
     {
         public Guid Id { get; set; }
     }
