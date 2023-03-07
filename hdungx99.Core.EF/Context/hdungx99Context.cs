@@ -11,7 +11,6 @@ namespace hdungx99.Core.EF.Context
     {
         public hdungx99Context(DbContextOptions<hdungx99Context> options) : base(options)
         {
-
         }
     }
 }
