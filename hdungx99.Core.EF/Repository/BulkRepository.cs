@@ -48,7 +48,7 @@ namespace hdungx99.Core.EF.Repository
         public async Task UpdateList(List<TModel> models)
         {
             var entities = _mapper.Map<List<TEntity>>(models);
-            _entity.BulkUpdateAsync(entities);
+            await _entity.BulkUpdateAsync(entities);
             await _context.SaveChangesAsync();
         }
     }

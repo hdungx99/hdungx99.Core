@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace hdungx99.Core.EF.Repository
 {
@@ -18,11 +19,13 @@ namespace hdungx99.Core.EF.Repository
         private readonly hdungx99Context _context;
         private readonly DbSet<TEntity> _entity;
         private readonly IMapper _mapper;
-        protected GenericRepository(hdungx99Context context, DbSet<TEntity> entity, IMapper mapper)
+        private readonly ICacheRepository<TEntity, TModel> _cache;
+        protected GenericRepository(hdungx99Context context, DbSet<TEntity> entity, IMapper mapper, ICacheRepository<TEntity, TModel> cache)
         {
             _mapper = mapper;
             _context = context;
             _entity = entity;
+            _cache = cache;
         }
 
         public async Task Delete(Guid Id)
@@ -32,6 +35,7 @@ namespace hdungx99.Core.EF.Repository
             {
                 _entity.Remove(entity);
                 await _context.SaveChangesAsync();
+                await _cache.Delete(Id);
             }
         }
 
@@ -57,7 +61,11 @@ namespace hdungx99.Core.EF.Repository
 
         public async Task<TModel> GetById(Guid Id)
         {
-            var data=await _entity.FindAsync(Id);
+            var cacheData = _cache.GetById(Id);
+            if (cacheData is not null) {
+                return _mapper.Map<TModel>(cacheData);
+            }
+            var data = await _entity.FindAsync(Id);
             return _mapper.Map<TModel>(data);
         }
 
@@ -66,6 +74,7 @@ namespace hdungx99.Core.EF.Repository
             var entity = _mapper.Map<TEntity>(model);
             await _entity.AddAsync(entity);
             await _context.SaveChangesAsync();
+            await _cache.Insert(model);
         }
 
         public async Task InsertList(List<TModel> models)
