@@ -5,18 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hdungx99.Core.EF.Repository
 {
-    public abstract class GenericRepository<TEntity, TModel> : IGenericRepository<TEntity, TModel> where TEntity : BaseEntity, new() where TModel : BaseEntity, new()
+    public abstract class GenericRepository<TEntity, TModel> : IGenericRepository<TEntity, TModel> where TEntity : BaseEntity, new() where TModel : BaseEntity
     {
         private readonly DbContext _context;
         private readonly DbSet<TEntity> _entity;
         private readonly IMapper _mapper;
-        private readonly ICacheRepository<TEntity, TModel> _cache;
-        protected GenericRepository(DbContext context, DbSet<TEntity> entity, IMapper mapper, ICacheRepository<TEntity, TModel> cache)
+        protected GenericRepository(DbContext context, IMapper mapper)
         {
             _mapper = mapper;
             _context = context;
-            _entity = entity;
-            _cache = cache;
+            _entity = _context.Set<TEntity>();
         }
 
         public async Task Delete(Guid Id)
@@ -26,7 +24,6 @@ namespace hdungx99.Core.EF.Repository
             {
                 _entity.Remove(entity);
                 await _context.SaveChangesAsync();
-                await _cache.Delete(Id);
             }
         }
 
@@ -49,14 +46,8 @@ namespace hdungx99.Core.EF.Repository
             var data = await _entity.ToListAsync();
             return _mapper.Map<IEnumerable<TModel>>(data);
         }
-
         public async Task<TModel> GetById(Guid Id)
         {
-            var cacheData = _cache.GetById(Id);
-            if (cacheData is not null)
-            {
-                return _mapper.Map<TModel>(cacheData);
-            }
             var data = await _entity.FindAsync(Id);
             return _mapper.Map<TModel>(data);
         }
@@ -66,7 +57,6 @@ namespace hdungx99.Core.EF.Repository
             var entity = _mapper.Map<TEntity>(model);
             await _entity.AddAsync(entity);
             await _context.SaveChangesAsync();
-            await _cache.Insert(model);
         }
 
         public async Task InsertList(List<TModel> models)
