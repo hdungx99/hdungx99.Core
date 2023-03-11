@@ -17,7 +17,7 @@ namespace hdungx99.Core.EF.Repository
     {
         private readonly hdungx99Context _context;
         private readonly DbSet<TEntity> _entity;
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
         protected GenericRepository(hdungx99Context context, DbSet<TEntity> entity, IMapper mapper)
         {
             _mapper = mapper;
