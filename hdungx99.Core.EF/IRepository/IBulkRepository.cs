@@ -1,12 +1,5 @@
 ﻿using hdungx99.Core.EF.Entity;
 using hdungx99.Core.EF.Models;
-using hdungx99.Core.EF.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace hdungx99.Core.EF.IRepository
 {

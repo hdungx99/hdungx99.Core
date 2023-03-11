@@ -1,20 +1,11 @@
-﻿using hdungx99.Core.EF.Entity;
+﻿using AutoMapper;
+using hdungx99.Core.EF.Entity;
 using hdungx99.Core.EF.IRepository;
 using hdungx99.Core.EF.Models;
 using Microsoft.Extensions.Caching.Distributed;
-using StackExchange.Redis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Text.Json;
-using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Serialization;
 
 namespace hdungx99.Core.EF.Repository
 {
@@ -50,11 +41,11 @@ namespace hdungx99.Core.EF.Repository
         public async Task Insert(TModel model)
         {
             var options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(DateTime.Now.AddMinutes(10)).SetSlidingExpiration(TimeSpan.FromMinutes(5));
-            var entity=_mapper.Map<TEntity>(model);
+            var entity = _mapper.Map<TEntity>(model);
             var bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(entity, GetJsonSerializerOptions()));
             await _cache.SetAsync(model.Id.ToString(), bytes, options);
         }
-        public async Task InsertList(string Key,IEnumerable<TModel> models)
+        public async Task InsertList(string Key, IEnumerable<TModel> models)
         {
             var options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(DateTime.Now.AddMinutes(10)).SetSlidingExpiration(TimeSpan.FromMinutes(5));
             var entity = _mapper.Map<IEnumerable<TEntity>>(models);

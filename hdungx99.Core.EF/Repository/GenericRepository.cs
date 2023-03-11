@@ -4,13 +4,6 @@ using hdungx99.Core.EF.Entity;
 using hdungx99.Core.EF.IRepository;
 using hdungx99.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace hdungx99.Core.EF.Repository
 {
@@ -41,8 +34,8 @@ namespace hdungx99.Core.EF.Repository
 
         public async Task DeleteList(List<Guid> Ids)
         {
-            var data = _entity.Where(x=>Ids.Contains(x.Id));
-            var entities=_mapper.Map<List<TEntity>>(data);
+            var data = _entity.Where(x => Ids.Contains(x.Id));
+            var entities = _mapper.Map<List<TEntity>>(data);
             _entity.RemoveRange(entities);
             await _context.SaveChangesAsync();
         }
@@ -62,7 +55,8 @@ namespace hdungx99.Core.EF.Repository
         public async Task<TModel> GetById(Guid Id)
         {
             var cacheData = _cache.GetById(Id);
-            if (cacheData is not null) {
+            if (cacheData is not null)
+            {
                 return _mapper.Map<TModel>(cacheData);
             }
             var data = await _entity.FindAsync(Id);

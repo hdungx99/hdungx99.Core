@@ -4,12 +4,6 @@ using hdungx99.Core.EF.Entity;
 using hdungx99.Core.EF.IRepository;
 using hdungx99.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace hdungx99.Core.EF.Repository
 {
