@@ -1,24 +1,16 @@
 ﻿using AutoMapper;
-using hdungx99.Core.EF.Context;
 using hdungx99.Core.EF.Entity;
 using hdungx99.Core.EF.IRepository;
-using hdungx99.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace hdungx99.Core.EF.Repository
 {
-    public abstract class Bulkrepository<TEntity, TModel> : IBulkRepositoryy<TEntity, TModel> where TEntity : BaseEntity, new() where TModel : BaseModel, new()
+    public abstract class Bulkrepository<TEntity, TModel> : IBulkRepositoryy<TEntity, TModel> where TEntity : BaseEntity, new() where TModel : BaseEntity, new()
     {
-        private readonly hdungx99Context _context;
+        private readonly DbContext _context;
         private readonly DbSet<TEntity> _entity;
         private IMapper _mapper;
-        protected Bulkrepository(hdungx99Context context, DbSet<TEntity> entity, IMapper mapper)
+        protected Bulkrepository(DbContext context, DbSet<TEntity> entity, IMapper mapper)
         {
             _mapper = mapper;
             _context = context;
@@ -48,7 +40,7 @@ namespace hdungx99.Core.EF.Repository
         public async Task UpdateList(List<TModel> models)
         {
             var entities = _mapper.Map<List<TEntity>>(models);
-            _entity.BulkUpdateAsync(entities);
+            await _entity.BulkUpdateAsync(entities);
             await _context.SaveChangesAsync();
         }
     }

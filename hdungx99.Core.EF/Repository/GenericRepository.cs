@@ -1,28 +1,20 @@
 ﻿using AutoMapper;
-using hdungx99.Core.EF.Context;
 using hdungx99.Core.EF.Entity;
 using hdungx99.Core.EF.IRepository;
-using hdungx99.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace hdungx99.Core.EF.Repository
 {
-    public abstract class GenericRepository<TEntity, TModel> : IGenericRepository<TEntity, TModel> where TEntity : BaseEntity, new() where TModel : BaseModel, new()
+    public abstract class GenericRepository<TEntity, TModel> : IGenericRepository<TEntity, TModel> where TEntity : BaseEntity, new() where TModel : BaseEntity
     {
-        private readonly hdungx99Context _context;
+        private readonly DbContext _context;
         private readonly DbSet<TEntity> _entity;
-        private IMapper _mapper;
-        protected GenericRepository(hdungx99Context context, DbSet<TEntity> entity, IMapper mapper)
+        private readonly IMapper _mapper;
+        protected GenericRepository(DbContext context, IMapper mapper)
         {
             _mapper = mapper;
             _context = context;
-            _entity = entity;
+            _entity = _context.Set<TEntity>();
         }
 
         public async Task Delete(Guid Id)
@@ -37,8 +29,8 @@ namespace hdungx99.Core.EF.Repository
 
         public async Task DeleteList(List<Guid> Ids)
         {
-            var data = _entity.Where(x=>Ids.Contains(x.Id));
-            var entities=_mapper.Map<List<TEntity>>(data);
+            var data = _entity.Where(x => Ids.Contains(x.Id));
+            var entities = _mapper.Map<List<TEntity>>(data);
             _entity.RemoveRange(entities);
             await _context.SaveChangesAsync();
         }
@@ -54,10 +46,9 @@ namespace hdungx99.Core.EF.Repository
             var data = await _entity.ToListAsync();
             return _mapper.Map<IEnumerable<TModel>>(data);
         }
-
         public async Task<TModel> GetById(Guid Id)
         {
-            var data=await _entity.FindAsync(Id);
+            var data = await _entity.FindAsync(Id);
             return _mapper.Map<TModel>(data);
         }
 
