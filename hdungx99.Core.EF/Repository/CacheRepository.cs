@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using hdungx99.Core.EF.Entity;
 using hdungx99.Core.EF.IRepository;
-using hdungx99.Core.EF.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text;
 using System.Text.Json;
@@ -9,7 +8,7 @@ using System.Text.Json.Serialization;
 
 namespace hdungx99.Core.EF.Repository
 {
-    public class CacheRepository<TEntity, TModel> : ICacheRepository<TEntity, TModel> where TEntity : BaseEntity, new() where TModel : BaseModel, new()
+    public class CacheRepository<TEntity, TModel> : ICacheRepository<TEntity, TModel> where TEntity : BaseEntity, new() where TModel : BaseEntity, new()
     {
         private readonly IDistributedCache _cache;
         private readonly IMapper _mapper;

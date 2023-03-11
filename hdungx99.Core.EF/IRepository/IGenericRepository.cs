@@ -1,10 +1,9 @@
 ﻿using hdungx99.Core.EF.Entity;
-using hdungx99.Core.EF.Models;
 using System.Linq.Expressions;
 
 namespace hdungx99.Core.EF.IRepository
 {
-    public interface IGenericRepository<TEntity, TModel> where TEntity : BaseEntity, new() where TModel : BaseModel, new()
+    public interface IGenericRepository<TEntity, TModel> where TEntity : BaseEntity, new() where TModel : BaseEntity
     {
         Task<IEnumerable<TModel>> GetAll();
         Task<TModel> GetById(Guid Id);

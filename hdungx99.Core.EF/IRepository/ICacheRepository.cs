@@ -1,9 +1,8 @@
 ﻿using hdungx99.Core.EF.Entity;
-using hdungx99.Core.EF.Models;
 
 namespace hdungx99.Core.EF.IRepository
 {
-    public interface ICacheRepository<TEntity, TModel> where TEntity : BaseEntity, new() where TModel : BaseModel, new()
+    public interface ICacheRepository<TEntity, TModel> where TEntity : BaseEntity, new() where TModel : BaseEntity, new()
     {
         Task<TModel> GetById(Guid Id);
         Task Insert(TModel model);
